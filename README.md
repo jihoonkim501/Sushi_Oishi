@@ -5,6 +5,7 @@
 - 기획·기능·API·DB 명세: [`PROJECT_SPEC.md`](./PROJECT_SPEC.md)
 - 디자인 토큰·컴포넌트·화면 규칙: [`DESIGN.md`](./DESIGN.md)
 - 에이전트 작업 규칙: [`CLAUDE.md`](./CLAUDE.md)
+- 이슈/브랜치/커밋/PR 작업 흐름: [`.github/WORKFLOW.md`](./.github/WORKFLOW.md)
 
 ## 폴더 구조
 
