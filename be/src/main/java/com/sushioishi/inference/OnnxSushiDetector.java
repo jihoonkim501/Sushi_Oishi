@@ -52,10 +52,18 @@ public class OnnxSushiDetector implements SushiDetector {
         } else {
             try (InputStream in = res.getInputStream()) {
                 loaded = env.createSession(in.readAllBytes(), new OrtSession.SessionOptions());
+                checkOutputShape(loaded, classCount);
                 name = loaded.getInputNames().iterator().next();
                 log.info("ONNX 모델 로드 완료: {}", modelPath);
             } catch (IOException | OrtException | RuntimeException e) {
                 log.error("ONNX 모델을 로드하지 못했습니다: {}", modelPath, e);
+                if (loaded != null) {
+                    try {
+                        loaded.close();
+                    } catch (OrtException closeError) {
+                        log.warn("ONNX 세션을 닫지 못했습니다", closeError);
+                    }
+                }
                 loaded = null;
             }
         }
@@ -84,6 +92,22 @@ public class OnnxSushiDetector implements SushiDetector {
         } catch (OrtException e) {
             log.error("ONNX 추론 실패", e);
             throw new ApiException(ErrorCode.MODEL_UNAVAILABLE);
+        } catch (IllegalStateException e) {
+            log.error("ONNX 출력 형식이 올바르지 않습니다", e);
+            throw new ApiException(ErrorCode.MODEL_UNAVAILABLE);
+        }
+    }
+
+    /** 로드 시점 검증. 출력 형태가 정적으로 알려진 경우에만 확인하고, 동적 축(-1)은 추론 시 {@link #parse}가 확인한다. */
+    private static void checkOutputShape(OrtSession session, int classCount) throws OrtException {
+        for (var info : session.getOutputInfo().values()) {
+            if (info.getInfo() instanceof ai.onnxruntime.TensorInfo tensor) {
+                long[] shape = tensor.getShape();
+                if (shape.length == 3 && shape[1] > 0 && shape[2] > 0) {
+                    layout(shape, classCount);
+                }
+                return; // 첫 번째 출력만 사용한다
+            }
         }
     }
 
@@ -103,18 +127,8 @@ public class OnnxSushiDetector implements SushiDetector {
             throw new IllegalStateException("지원하지 않는 출력 형태: " + java.util.Arrays.toString(shape));
         }
         int channels = 4 + classCount;
-        boolean channelFirst;
-        int anchors;
-        if (shape[1] == channels) {
-            channelFirst = true;
-            anchors = (int) shape[2];
-        } else if (shape[2] == channels) {
-            channelFirst = false;
-            anchors = (int) shape[1];
-        } else {
-            throw new IllegalStateException("출력 채널 수가 클래스 수(" + classCount + ")와 맞지 않습니다: "
-                    + java.util.Arrays.toString(shape));
-        }
+        boolean channelFirst = layout(shape, classCount);
+        int anchors = (int) (channelFirst ? shape[2] : shape[1]);
 
         List<RawDetection> out = new ArrayList<>();
         for (int a = 0; a < anchors; a++) {
@@ -135,6 +149,19 @@ public class OnnxSushiDetector implements SushiDetector {
                     best, bestScore));
         }
         return out;
+    }
+
+    /** @return 채널 우선({@code [1, 4+C, A]})이면 true, 앵커 우선({@code [1, A, 4+C]})이면 false */
+    private static boolean layout(long[] shape, int classCount) {
+        int channels = 4 + classCount;
+        if (shape[1] == channels) {
+            return true;
+        }
+        if (shape[2] == channels) {
+            return false;
+        }
+        throw new IllegalStateException("출력 채널 수가 클래스 수(" + classCount + ")와 맞지 않습니다: "
+                + java.util.Arrays.toString(shape));
     }
 
     private static float at(float[] data, boolean channelFirst, int anchors, int channels, int anchor, int channel) {
