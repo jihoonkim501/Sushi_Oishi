@@ -11,10 +11,26 @@ spring:
     open-in-view: false
   flyway:
     locations: classpath:db/migration
+  servlet:
+    multipart:
+      # 5MB 검증은 ImagePreprocessor가 한다. 컨테이너는 6MB에서 1차 차단 (F2-1 4단계)
+      max-file-size: 6MB
+      max-request-size: 7MB
 
 server:
   port: ${SERVER_PORT:8080}
+  # 프록시/로드밸런서 뒤에서는 NATIVE 또는 FRAMEWORK 로 설정해야 X-Forwarded-For 가 반영되어
+  # IP별 요청 한도(getRemoteAddr)가 실제 클라이언트 기준으로 동작한다. 프록시가 없으면 NONE 유지(헤더 위조 방지).
+  forward-headers-strategy: ${FORWARD_HEADERS_STRATEGY:none}
 
 sushioishi:
   model:
     version: v1
+  inference:
+    # unavailable(기본, 모델 없음) | stub(개발용 가짜 탐지기). ONNX 탐지기 추가 시 값 확장
+    detector: ${INFERENCE_DETECTOR:unavailable}
+    max-concurrency: 2
+    min-confidence: 0.40
+    queue-timeout: 10s
+  storage:
+    type: none
