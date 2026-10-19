@@ -1,0 +1,49 @@
+/* 히트 영역은 트랙이 아니라 최소 44px 높이의 버튼 전체 */
+.hit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.track {
+  position: relative;
+  width: 52px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--color-toggle-off);
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.on .track {
+  background: var(--color-primary-strong);
+}
+
+.thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-full);
+  background: var(--color-on-primary);
+  color: var(--color-primary-strong);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.on .thumb {
+  transform: translateX(20px);
+}
+
+.hit:focus-visible .track {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}

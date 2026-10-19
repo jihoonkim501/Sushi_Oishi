@@ -1,0 +1,47 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  padding: var(--space-10) var(--gutter) var(--space-6);
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-5);
+}
+
+.thumb {
+  height: 96px;
+  border-radius: var(--radius-md);
+}
+
+.title {
+  margin: 0;
+  font: var(--text-title);
+}
+
+.tips {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--color-text-muted);
+  font: var(--text-caption);
+}
+
+.tipIcon {
+  flex: none;
+  color: var(--color-wood);
+}

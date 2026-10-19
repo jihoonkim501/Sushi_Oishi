@@ -1,0 +1,31 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  padding: var(--space-10) var(--gutter) var(--space-6);
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  text-align: center;
+}
+
+.icon {
+  color: var(--color-danger);
+}
+
+.title {
+  margin: 0;
+  font: var(--text-title);
+}
+
+.description {
+  margin: 0;
+  color: var(--color-text-muted);
+  font: var(--text-caption);
+}

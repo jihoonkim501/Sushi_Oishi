@@ -1,0 +1,115 @@
+.box {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+/* 작은 박스도 44x44 탭 영역을 보장하는 투명 히트 영역 */
+.box::before {
+  content: '';
+  position: absolute;
+  inset: calc(var(--hit-y) * -1) calc(var(--hit-x) * -1);
+}
+
+.frame {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--color-on-scrim);
+  border-radius: var(--radius-md);
+  opacity: 0.9;
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out);
+}
+
+.low .frame {
+  border-style: dashed;
+}
+
+.selected .frame {
+  inset: -1px;
+  border: 3px solid var(--color-primary);
+  /* 사진 위 대비 보장용 바깥 1px 링 */
+  box-shadow: 0 0 0 1px var(--color-on-scrim);
+  opacity: 1;
+}
+
+.eaten .frame,
+.eaten .tag {
+  opacity: 0.4;
+}
+
+.tag {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: opacity var(--duration-base) var(--ease-out);
+}
+
+.tagScale {
+  display: block;
+  transform-origin: 14px 14px;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.selected .tagScale {
+  transform: scale(1.15);
+}
+
+.tagInner {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  white-space: nowrap;
+}
+
+.label {
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--color-overlay-scrim);
+  color: var(--color-on-scrim);
+  font: var(--text-label);
+}
+
+.enter .tagInner {
+  animation: badge-in var(--duration-base) var(--ease-out) var(--enter-delay) backwards;
+}
+
+.box .pulse {
+  animation: badge-pulse var(--duration-slow) var(--ease-out);
+}
+
+.box:focus-visible .frame {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+@keyframes badge-in {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+@keyframes badge-pulse {
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter .tagInner,
+  .box .pulse,
+  .frame,
+  .tag,
+  .tagScale {
+    animation: none;
+    transition: none;
+  }
+}

@@ -13,6 +13,10 @@
   --color-wood: #C9A57A;
   --color-danger: #C0392B;
   --color-overlay-scrim: rgba(0, 0, 0, 0.45);
+  --color-on-scrim: #FFFFFF;
+  --color-photo-bg: #000000;
+  --color-backdrop: rgba(0, 0, 0, 0.5);
+  --color-toggle-off: #8A847E;
 
   /* order badge */
   --badge-white: #CFE6F0;
@@ -73,7 +77,6 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --color-primary-strong: #E0603E;
     --color-bg: #141414;
     --color-surface: #1E1E1E;
     --color-surface-muted: #2A2A2A;
@@ -84,11 +87,11 @@
     --color-wood: #B08F66;
     --color-danger: #E06655;
     --color-overlay-scrim: rgba(0, 0, 0, 0.6);
+    --color-backdrop: rgba(0, 0, 0, 0.7);
   }
 }
 
 :root[data-theme="dark"] {
-  --color-primary-strong: #E0603E;
   --color-bg: #141414;
   --color-surface: #1E1E1E;
   --color-surface-muted: #2A2A2A;
@@ -99,4 +102,13 @@
   --color-wood: #B08F66;
   --color-danger: #E06655;
   --color-overlay-scrim: rgba(0, 0, 0, 0.6);
+  --color-backdrop: rgba(0, 0, 0, 0.7);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+  }
 }

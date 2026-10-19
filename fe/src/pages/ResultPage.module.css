@@ -1,0 +1,87 @@
+.page {
+  --sheet-h: 45vh;
+  position: relative;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--color-photo-bg);
+}
+
+.page[data-sheet='COLLAPSED'] {
+  --sheet-h: 88px;
+}
+
+.page[data-sheet='FULL'] {
+  --sheet-h: 90vh;
+}
+
+/* 목록 전용 모드: 사진이 없으므로 밝은 배경에 안내 + 전체 높이 시트 */
+.listOnly {
+  --sheet-h: 90vh;
+  background: var(--color-bg);
+}
+
+.photoArea {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: var(--sheet-h);
+  transition: bottom var(--duration-slow) var(--ease-out);
+}
+
+.photoPlaceholder {
+  background: var(--color-surface-muted);
+}
+
+.topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1500;
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  padding: 0 var(--space-2);
+  pointer-events: none;
+}
+
+.topbar > * {
+  pointer-events: auto;
+}
+
+.topbarPlain {
+  background: var(--color-bg);
+}
+
+.noPhoto {
+  position: absolute;
+  inset: 56px 0 0;
+  padding: 0 var(--gutter);
+}
+
+.skeletonSheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2000;
+  height: var(--sheet-h);
+  padding: var(--space-6) 0 0;
+  border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sheet);
+}
+
+.skeletonRow {
+  height: 64px;
+  margin: 0 var(--gutter) var(--space-2);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photoArea {
+    transition: none;
+  }
+}
