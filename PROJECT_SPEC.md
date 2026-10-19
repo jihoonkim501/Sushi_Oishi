@@ -225,8 +225,8 @@ project/                    # 저장소 루트 (IntelliJ로 이 폴더를 열고
 ├─ be/                      # 백엔드: Spring Boot (IntelliJ)
 │  ├─ build.gradle.kts
 │  └─ src/
-│     ├─ main/java/com/sushisoon/
-│     │  ├─ SushiSoonApplication.java
+│     ├─ main/java/com/sushioishi/
+│     │  ├─ SushiOishiApplication.java
 │     │  ├─ scan/           # ScanController, ScanService, Scan, Detection, DTO
 │     │  ├─ inference/      # SushiDetector, ImagePreprocessor, PostProcessor, Nms
 │     │  ├─ order/          # OrderEngine, SushiType, SushiTypeRepository
@@ -237,7 +237,7 @@ project/                    # 저장소 루트 (IntelliJ로 이 폴더를 열고
 │     │  ├─ application.yml
 │     │  ├─ db/migration/   # V1__init.sql, V2__seed_sushi_types.sql ...
 │     │  └─ model/          # sushi-yolo-v1.onnx, labels.json (git-lfs 또는 배포 시 다운로드)
-│     └─ test/java/com/sushisoon/
+│     └─ test/java/com/sushioishi/
 ├─ fe/                      # 프론트엔드: React + Vite (IntelliJ Ultimate 또는 VS Code)
 │  ├─ vite.config.ts        # /api → localhost:8080 프록시
 │  └─ src/
@@ -260,7 +260,7 @@ project/                    # 저장소 루트 (IntelliJ로 이 폴더를 열고
 ## 7. 백엔드 명세
 
 ### 7.1 처리 파이프라인 (`POST /api/v1/scans`)
-1. 이미지 수신: 최대 5MB, `image/jpeg`, `image/png`, `image/heic`(가능 시 변환, 불가 시 415)
+1. 이미지 수신: 최대 5MB, `image/jpeg`, `image/png`, 그 외 형식(HEIC 포함)은 415
 2. EXIF 회전 보정 → 긴 변 1280px 리사이즈 (이 크기가 응답 좌표 기준)
 3. 원본 저장 (요청 파라미터 `consent=true`일 때만)
 4. 모델 입력 변환(640×640 letterbox) → ONNX 추론
@@ -321,7 +321,9 @@ project/                    # 저장소 루트 (IntelliJ로 이 폴더를 열고
 | 400 | INVALID_CLASS_ID | 없는 classId로 수정 |
 | 404 | SCAN_NOT_FOUND | 스캔 없음 또는 다른 기기의 스캔 |
 | 404 | ITEM_NOT_FOUND | 스캔에 없는 itemId |
-| 413 | IMAGE_TOO_LARGE | 5MB 또는 50MP 초과 |
+| 404 | NOT_FOUND | 존재하지 않는 경로 |
+| 405 | METHOD_NOT_ALLOWED | 허용되지 않는 메서드 |
+| 413 | IMAGE_TOO_LARGE | 5MB 또는 25MP 초과 |
 | 415 | UNSUPPORTED_FORMAT | 지원하지 않는 형식 |
 | 422 | NO_SUSHI_DETECTED | 인식 결과 0개 (scan은 저장하지 않음) |
 | 429 | RATE_LIMITED | 기기당 분당 10회 초과 (`POST /scans`), `Retry-After` 헤더 |
@@ -344,7 +346,7 @@ project/                    # 저장소 루트 (IntelliJ로 이 폴더를 열고
 
 ### 7.4 구현 메모
 - 모델은 애플리케이션 시작 시 한 번 로드(`@PostConstruct` 또는 `@Bean`), `OrtSession`은 재사용. 추론은 스레드 안전성을 확인하고 필요 시 세션 풀 사용.
-- `modelVersion`은 설정값(`sushisoon.model.version`)으로 관리하고 응답·DB에 기록.
+- `modelVersion`은 설정값(`sushioishi.model.version`)으로 관리하고 응답·DB에 기록.
 - 레이트 리밋은 MVP에서 인메모리(Bucket4j 등)로 충분.
 - 스캔 조회·수정은 항상 `device_id` 조건을 함께 건다. 다른 기기의 스캔은 존재 여부를 숨기고 `404 SCAN_NOT_FOUND`.
 - 추론 동시 실행 수는 세마포어로 제한한다(기본 2). 10초 안에 차례가 오지 않으면 `503 SERVER_BUSY`.
