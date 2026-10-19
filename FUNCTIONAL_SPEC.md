@@ -206,7 +206,7 @@ S-01 홈 ──촬영/선택──▶ S-02 사진 확인 ──다시 찍기─�
     - `padX = (640 - newW) / 2`, `padY = (640 - newH) / 2` (실수 유지, 그릴 때만 floor)
     - 패딩 색 RGB(114,114,114)
 2. 텐서 변환: NCHW, RGB 순서, `value / 255.0f` (정확한 규칙은 `ml/exports/MODEL_CARD.md` 기준).
-3. 추론 동시 실행 수 제한: 세마포어 permits = `sushisoon.inference.max-concurrency` (기본 2). 10초 안에 permit을 못 얻으면 `503 SERVER_BUSY`.
+3. 추론 동시 실행 수 제한: 세마포어 permits = `sushioishi.inference.max-concurrency` (기본 2). 10초 안에 permit을 못 얻으면 `503 SERVER_BUSY`.
 4. `OrtSession.run` 실행. 세션은 애플리케이션 시작 시 1회 생성해 재사용한다.
 5. 출력 텐서를 `RawDetection(cx, cy, w, h, classIndex, confidence)` 목록으로 파싱한다 (출력 형태는 MODEL_CARD 기준. Ultralytics 기본 내보내기라면 `[1, 4+C, A]`, 각 앵커의 클래스 점수 중 최댓값을 confidence로 사용).
 
@@ -218,7 +218,7 @@ S-01 홈 ──촬영/선택──▶ S-02 사진 확인 ──다시 찍기─�
 
 | 단계 | 규칙 ID | 내용 |
 | --- | --- | --- |
-| 1 | BR-DET-01 | confidence < 0.40 제거 (`sushisoon.inference.min-confidence`) |
+| 1 | BR-DET-01 | confidence < 0.40 제거 (`sushioishi.inference.min-confidence`) |
 | 2 | BR-DET-02 | 640 공간 좌표 → 기준 이미지 좌표: `x = (x640 - padX) / r`, `y = (y640 - padY) / r` |
 | 3 | BR-DET-03 | 좌표를 `[0, W] × [0, H]`로 자르고 정수로 반올림. 자른 뒤 너비나 높이가 8px 미만이면 제거 |
 | 4 | BR-DET-04 | 클래스 무관 NMS: confidence 내림차순으로 순회, 이미 채택된 박스와 IoU ≥ 0.50이면 제거 |
@@ -249,7 +249,7 @@ S-01 홈 ──촬영/선택──▶ S-02 사진 확인 ──다시 찍기─�
 
 **관련 요구사항**: FR-DET-008
 
-- 설정 `sushisoon.model.version`(예: `v1`)과 `sushisoon.model.path`를 읽는다.
+- 설정 `sushioishi.model.version`(예: `v1`)과 `sushioishi.model.path`를 읽는다.
 - 모든 스캔의 `scans.model_version`과 응답 `modelVersion`에 기록한다.
 - `GET /health`에 같은 값을 노출한다.
 
@@ -534,7 +534,7 @@ function assignOrder(items, scoreOf):
 **관련 요구사항**: FR-DEV-001~004, NFR-EXT-001
 
 **클라이언트**
-- 앱 시작 시 `localStorage['sushisoon.deviceId']` 확인 → 없으면 `crypto.randomUUID()` 생성·저장.
+- 앱 시작 시 `localStorage['sushioishi.deviceId']` 확인 → 없으면 `crypto.randomUUID()` 생성·저장.
 - `localStorage` 접근이 실패하면(사파리 개인정보 보호 모드 등) 메모리 값으로 동작하고, 새로고침 시 이전 결과는 볼 수 없음을 허용한다.
 - `api.ts`의 fetch 래퍼가 모든 요청에 `X-Device-Id`를 붙인다.
 
@@ -549,14 +549,14 @@ function assignOrder(items, scoreOf):
 **관련 요구사항**: FR-TYP-001, 002, FR-ORD-007
 
 - 서버: `GET /sushi-types`는 `SushiTypeCache` 값을 반환, `Cache-Control: public, max-age=600`.
-- 클라이언트: TanStack Query `['sushiTypes']`, `staleTime = 24h`, `gcTime = 7d`. 앱 시작 시 `localStorage['sushisoon.sushiTypes.v1']`로 초기값을 채우고 백그라운드 갱신, 성공 시 다시 저장.
+- 클라이언트: TanStack Query `['sushiTypes']`, `staleTime = 24h`, `gcTime = 7d`. 앱 시작 시 `localStorage['sushioishi.sushiTypes.v1']`로 초기값을 채우고 백그라운드 갱신, 성공 시 다시 저장.
 - 결과 화면은 종류 목록이 없어도 응답의 `nameKo`, `group`으로 표시할 수 있다. 수정 시트는 종류 목록이 필요하므로, 없으면 로딩 후 연다.
 
 ### C-3 설정과 사진 저장 동의
 
 **관련 요구사항**: FR-IMG-008, NFR-PRI-001~003
 
-**동의 상태**: `localStorage['sushisoon.consent']` = `granted` | `denied` | (없음 = 미결정)
+**동의 상태**: `localStorage['sushioishi.consent']` = `granted` | `denied` | (없음 = 미결정)
 
 **동의 다이얼로그 (S-08)**
 - 미결정 상태에서 `분석하기`를 누를 때 1회 표시.
@@ -574,7 +574,7 @@ function assignOrder(items, scoreOf):
 
 | 항목 | 동작 |
 | --- | --- |
-| 화면 모드 | 시스템 / 라이트 / 다크. `localStorage['sushisoon.theme']`, `<html data-theme>` 적용 |
+| 화면 모드 | 시스템 / 라이트 / 다크. `localStorage['sushioishi.theme']`, `<html data-theme>` 적용 |
 | 사진 저장 동의 | 토글. 바꾸면 즉시 `consent` 갱신, 이후 스캔부터 적용 |
 | 데이터 출처 | C-7 목록 |
 | 버전 | 앱 버전, `GET /health`의 modelVersion |
@@ -631,7 +631,7 @@ function assignOrder(items, scoreOf):
 
 **관련 요구사항**: FR-RES-011, BR-RES-09, 10
 
-- IndexedDB `sushisoon` / store `photos` / key `scanId` / value `{ blob, width, height, createdAt }`.
+- IndexedDB `sushioishi` / store `photos` / key `scanId` / value `{ blob, width, height, createdAt }`.
 - 최대 20건 보관, 초과 시 `createdAt`이 가장 오래된 것부터 삭제.
 - 저장 실패(용량 부족, 개인정보 보호 모드)는 무시하고 진행한다. 이 경우 새로고침하면 목록 전용 모드가 된다.
 
@@ -707,12 +707,12 @@ Flyway 파일: `be/src/main/resources/db/migration/V1__init.sql`, `V2__seed_sush
 
 | 위치 | 키 | 값 |
 | --- | --- | --- |
-| localStorage | `sushisoon.deviceId` | UUID |
-| localStorage | `sushisoon.consent` | `granted` / `denied` |
-| localStorage | `sushisoon.theme` | `system` / `light` / `dark` |
-| localStorage | `sushisoon.sushiTypes.v1` | 종류 목록 JSON |
-| localStorage | `sushisoon.lowConfidenceHintSeen` | `1` |
-| IndexedDB | `sushisoon.photos[scanId]` | C-8 |
+| localStorage | `sushioishi.deviceId` | UUID |
+| localStorage | `sushioishi.consent` | `granted` / `denied` |
+| localStorage | `sushioishi.theme` | `system` / `light` / `dark` |
+| localStorage | `sushioishi.sushiTypes.v1` | 종류 목록 JSON |
+| localStorage | `sushioishi.lowConfidenceHintSeen` | `1` |
+| IndexedDB | `sushioishi.photos[scanId]` | C-8 |
 
 모든 localStorage 접근은 try/catch로 감싼다.
 
@@ -732,7 +732,7 @@ Flyway 파일: `be/src/main/resources/db/migration/V1__init.sql`, `V2__seed_sush
 
 | 파트 | 타입 | 필수 | 규칙 |
 | --- | --- | --- | --- |
-| image | file | Y | JPEG/PNG, ≤ 5MB, ≤ 50MP |
+| image | file | Y | JPEG/PNG, ≤ 5MB, ≤ 25MP |
 | consent | text (`true`/`false`) | N | 기본 false |
 
 **응답 201 Created** — `Location: /api/v1/scans/{scanId}`, 본문 `ScanResponse`
@@ -862,7 +862,9 @@ interface ErrorResponse { code: ErrorCode; message: string; }
 | 400 | INVALID_CLASS_ID | 없는 classId | 알 수 없는 초밥 종류예요. |
 | 404 | SCAN_NOT_FOUND | 스캔 없음·다른 기기 | 결과를 찾을 수 없어요. |
 | 404 | ITEM_NOT_FOUND | 스캔에 없는 itemId | 해당 초밥을 찾을 수 없어요. |
-| 413 | IMAGE_TOO_LARGE | 5MB 또는 50MP 초과 | 사진이 너무 커요. |
+| 404 | NOT_FOUND | 존재하지 않는 경로 | 잠시 문제가 생겼어요. |
+| 405 | METHOD_NOT_ALLOWED | 허용되지 않는 메서드 | 잠시 문제가 생겼어요. |
+| 413 | IMAGE_TOO_LARGE | 5MB 또는 25MP 초과 | 사진이 너무 커요. |
 | 415 | UNSUPPORTED_FORMAT | JPEG/PNG 외 | 지원하지 않는 사진 형식이에요. |
 | 422 | NO_SUSHI_DETECTED | 인식 결과 0개 | 초밥을 찾지 못했어요. |
 | 429 | RATE_LIMITED | 요청 한도 초과 | 잠시 후 다시 시도해주세요. |
@@ -1051,6 +1053,6 @@ IDLE → PREPARING → UPLOADING → (SUCCESS | NOT_FOUND | FAILED | CANCELLED |
 | PROJECT_SPEC.md 4.2 | 같은 줄 판정을 BR-ORD-04 행 그룹핑 방식으로 명확화, confidence 동점 규칙 | 반영 완료 |
 | PROJECT_SPEC.md 7.2 | 오류 코드 추가: INVALID_DEVICE_ID, VALIDATION_ERROR, INVALID_CLASS_ID, SCAN_NOT_FOUND, ITEM_NOT_FOUND, SERVER_BUSY, INTERNAL_ERROR / POST 응답 201 + createdAt | 반영 완료 |
 | PROJECT_SPEC.md 7.4 | 다른 기기 접근은 404, 추론 동시 실행 제한 | 반영 완료 |
-| DESIGN.md 6장 | 홈 우상단 설정 아이콘·설정 시트(S-06), 동의 다이얼로그(S-08), 결과 목록 전용 모드 | 미반영 |
-| DESIGN.md 6.4 | 결과 상단바 `공유` 버튼은 v1에서 숨김 (REQUIREMENTS Q-1) | 결정 대기 |
-| DESIGN.md 7장 | 8장의 (신규) 문구 키 | 미반영 |
+| DESIGN.md 6장 | 홈 우상단 설정 아이콘·설정 시트(S-06), 동의 다이얼로그(S-08), 결과 목록 전용 모드 | 반영 완료 |
+| DESIGN.md 6.4 | 결과 상단바 `공유` 버튼은 v1에서 숨김 (REQUIREMENTS Q-1) | 반영 완료 (v1 숨김 확정) |
+| DESIGN.md 7장 | 8장의 (신규) 문구 키 | 반영 완료 |
