@@ -1,0 +1,34 @@
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# be/ (Gradle, Java)
+be/.gradle/
+be/build/
+be/out/
+be/bin/
+be/src/main/resources/model/*.onnx
+be/src/main/resources/model/labels.json
+
+# fe/ (Node, Vite)
+fe/node_modules/
+fe/dist/
+fe/dist-ssr/
+fe/.vite/
+fe/*.local
+
+# ml/
+ml/data/
+ml/exports/*.onnx
+ml/exports/*.pt
+ml/.ipynb_checkpoints/
+
+# env / secrets
+.env
+.env.*
+!.env.example

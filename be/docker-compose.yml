@@ -1,0 +1,14 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: sushisoon
+      POSTGRES_USER: sushisoon
+      POSTGRES_PASSWORD: sushisoon
+    ports:
+      - "5432:5432"
+    volumes:
+      - sushisoon-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  sushisoon-postgres-data:

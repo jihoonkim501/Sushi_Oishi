@@ -1,0 +1,21 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: var(--text-body);
+}
+
+#root {
+  min-height: 100svh;
+}
+
+@media (min-width: 768px) {
+  #root {
+    max-width: var(--content-max);
+    margin: 0 auto;
+  }
+}
