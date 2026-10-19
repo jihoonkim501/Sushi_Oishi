@@ -27,7 +27,7 @@ sushioishi:
   model:
     version: v1
   inference:
-    # unavailable(기본, 모델 없음) | stub(개발용 가짜 탐지기). ONNX 탐지기 추가 시 값 확장
+    # unavailable(기본, 모델 없음) | stub(개발용 가짜 탐지기) | onnx(ONNX Runtime, 모델 경로는 sushioishi.model.path)
     detector: ${INFERENCE_DETECTOR:unavailable}
     max-concurrency: 2
     min-confidence: 0.40
