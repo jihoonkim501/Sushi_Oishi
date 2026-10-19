@@ -1,0 +1,36 @@
+.spinner {
+  display: inline-block;
+  flex: none;
+  border: 2px solid var(--color-primary);
+  border-top-color: transparent;
+  border-radius: var(--radius-full);
+  animation: spin 800ms linear infinite;
+}
+
+.sm {
+  width: 24px;
+  height: 24px;
+}
+
+.lg {
+  width: 40px;
+  height: 40px;
+}
+
+.onPrimary {
+  border-color: var(--color-on-primary);
+  border-top-color: transparent;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 진행 표시이므로 reduced-motion이어도 유지하되 속도만 낮춘다 */
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 1600ms;
+  }
+}

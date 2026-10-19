@@ -1,0 +1,438 @@
+[
+  {
+    "id": "TC-ORD-01",
+    "items": [
+      {
+        "id": "a",
+        "classId": "salmon",
+        "confidence": 0.9,
+        "box": {
+          "x1": 60,
+          "y1": 70,
+          "x2": 140,
+          "y2": 130
+        }
+      },
+      {
+        "id": "b",
+        "classId": "hirame",
+        "confidence": 0.9,
+        "box": {
+          "x1": 260,
+          "y1": 70,
+          "x2": 340,
+          "y2": 130
+        }
+      },
+      {
+        "id": "c",
+        "classId": "tamago",
+        "confidence": 0.9,
+        "box": {
+          "x1": 60,
+          "y1": 270,
+          "x2": 140,
+          "y2": 330
+        }
+      },
+      {
+        "id": "d",
+        "classId": "maguro_akami",
+        "confidence": 0.9,
+        "box": {
+          "x1": 260,
+          "y1": 270,
+          "x2": 340,
+          "y2": 330
+        }
+      }
+    ],
+    "expected": [
+      "b",
+      "d",
+      "a",
+      "c"
+    ]
+  },
+  {
+    "id": "TC-ORD-02",
+    "items": [
+      {
+        "id": "a",
+        "classId": "hirame",
+        "confidence": 0.9,
+        "box": {
+          "x1": 260,
+          "y1": 70,
+          "x2": 340,
+          "y2": 130
+        }
+      },
+      {
+        "id": "b",
+        "classId": "hirame",
+        "confidence": 0.9,
+        "box": {
+          "x1": 60,
+          "y1": 80,
+          "x2": 140,
+          "y2": 140
+        }
+      }
+    ],
+    "expected": [
+      "b",
+      "a"
+    ]
+  },
+  {
+    "id": "TC-ORD-03",
+    "items": [
+      {
+        "id": "a",
+        "classId": "hirame",
+        "confidence": 0.9,
+        "box": {
+          "x1": 260,
+          "y1": 70,
+          "x2": 340,
+          "y2": 130
+        }
+      },
+      {
+        "id": "b",
+        "classId": "hirame",
+        "confidence": 0.9,
+        "box": {
+          "x1": 60,
+          "y1": 170,
+          "x2": 140,
+          "y2": 230
+        }
+      }
+    ],
+    "expected": [
+      "a",
+      "b"
+    ]
+  },
+  {
+    "id": "TC-ORD-04",
+    "items": [
+      {
+        "id": "a",
+        "classId": "salmon",
+        "confidence": 0.9,
+        "box": {
+          "x1": 260,
+          "y1": 70,
+          "x2": 340,
+          "y2": 130
+        }
+      },
+      {
+        "id": "b",
+        "classId": "engawa",
+        "confidence": 0.7,
+        "box": {
+          "x1": 60,
+          "y1": 70,
+          "x2": 140,
+          "y2": 130
+        }
+      }
+    ],
+    "expected": [
+      "b",
+      "a"
+    ],
+    "expectedClassIds": {
+      "b": "unknown"
+    }
+  },
+  {
+    "id": "TC-ORD-05",
+    "items": [
+      {
+        "id": "p",
+        "classId": "hirame",
+        "confidence": 0.9,
+        "box": {
+          "x1": 260,
+          "y1": 70,
+          "x2": 340,
+          "y2": 130
+        }
+      },
+      {
+        "id": "q",
+        "classId": "hirame",
+        "confidence": 0.9,
+        "box": {
+          "x1": 160,
+          "y1": 95,
+          "x2": 240,
+          "y2": 155
+        }
+      },
+      {
+        "id": "r",
+        "classId": "hirame",
+        "confidence": 0.9,
+        "box": {
+          "x1": 60,
+          "y1": 120,
+          "x2": 140,
+          "y2": 180
+        }
+      }
+    ],
+    "expected": [
+      "q",
+      "p",
+      "r"
+    ]
+  },
+  {
+    "id": "TC-ORD-06",
+    "items": [
+      {
+        "id": "a",
+        "classId": "salmon",
+        "confidence": 0.7,
+        "box": {
+          "x1": 160,
+          "y1": 70,
+          "x2": 240,
+          "y2": 130
+        }
+      },
+      {
+        "id": "b",
+        "classId": "salmon",
+        "confidence": 0.9,
+        "box": {
+          "x1": 160,
+          "y1": 80,
+          "x2": 240,
+          "y2": 140
+        }
+      }
+    ],
+    "expected": [
+      "b",
+      "a"
+    ]
+  },
+  {
+    "id": "TC-ORD-07",
+    "items": [],
+    "expected": []
+  },
+  {
+    "id": "TC-ORD-08",
+    "items": [
+      {
+        "id": "p1",
+        "classId": "tamago",
+        "confidence": 0.9,
+        "box": {
+          "x1": 60,
+          "y1": 70,
+          "x2": 140,
+          "y2": 130
+        }
+      },
+      {
+        "id": "p2",
+        "classId": "salmon",
+        "confidence": 0.9,
+        "box": {
+          "x1": 210,
+          "y1": 70,
+          "x2": 290,
+          "y2": 130
+        }
+      },
+      {
+        "id": "p3",
+        "classId": "hirame",
+        "confidence": 0.9,
+        "box": {
+          "x1": 360,
+          "y1": 70,
+          "x2": 440,
+          "y2": 130
+        }
+      },
+      {
+        "id": "p4",
+        "classId": "ikura",
+        "confidence": 0.9,
+        "box": {
+          "x1": 510,
+          "y1": 70,
+          "x2": 590,
+          "y2": 130
+        }
+      },
+      {
+        "id": "p5",
+        "classId": "tai",
+        "confidence": 0.9,
+        "box": {
+          "x1": 60,
+          "y1": 220,
+          "x2": 140,
+          "y2": 280
+        }
+      },
+      {
+        "id": "p6",
+        "classId": "salmon",
+        "confidence": 0.9,
+        "box": {
+          "x1": 210,
+          "y1": 220,
+          "x2": 290,
+          "y2": 280
+        }
+      },
+      {
+        "id": "p7",
+        "classId": "maguro_akami",
+        "confidence": 0.9,
+        "box": {
+          "x1": 360,
+          "y1": 220,
+          "x2": 440,
+          "y2": 280
+        }
+      },
+      {
+        "id": "p8",
+        "classId": "unagi",
+        "confidence": 0.9,
+        "box": {
+          "x1": 510,
+          "y1": 220,
+          "x2": 590,
+          "y2": 280
+        }
+      }
+    ],
+    "expected": [
+      "p3",
+      "p5",
+      "p7",
+      "p2",
+      "p6",
+      "p4",
+      "p8",
+      "p1"
+    ]
+  },
+  {
+    "id": "TC-ORD-09",
+    "items": [
+      {
+        "id": "p1",
+        "classId": "tamago",
+        "confidence": 0.9,
+        "box": {
+          "x1": 60,
+          "y1": 70,
+          "x2": 140,
+          "y2": 130
+        }
+      },
+      {
+        "id": "p2",
+        "classId": "salmon",
+        "confidence": 0.9,
+        "box": {
+          "x1": 210,
+          "y1": 70,
+          "x2": 290,
+          "y2": 130
+        }
+      },
+      {
+        "id": "p3",
+        "classId": "toro",
+        "confidence": 0.9,
+        "box": {
+          "x1": 360,
+          "y1": 70,
+          "x2": 440,
+          "y2": 130
+        }
+      },
+      {
+        "id": "p4",
+        "classId": "ikura",
+        "confidence": 0.9,
+        "box": {
+          "x1": 510,
+          "y1": 70,
+          "x2": 590,
+          "y2": 130
+        }
+      },
+      {
+        "id": "p5",
+        "classId": "tai",
+        "confidence": 0.9,
+        "box": {
+          "x1": 60,
+          "y1": 220,
+          "x2": 140,
+          "y2": 280
+        }
+      },
+      {
+        "id": "p6",
+        "classId": "salmon",
+        "confidence": 0.9,
+        "box": {
+          "x1": 210,
+          "y1": 220,
+          "x2": 290,
+          "y2": 280
+        }
+      },
+      {
+        "id": "p7",
+        "classId": "maguro_akami",
+        "confidence": 0.9,
+        "box": {
+          "x1": 360,
+          "y1": 220,
+          "x2": 440,
+          "y2": 280
+        }
+      },
+      {
+        "id": "p8",
+        "classId": "unagi",
+        "confidence": 0.9,
+        "box": {
+          "x1": 510,
+          "y1": 220,
+          "x2": 590,
+          "y2": 280
+        }
+      }
+    ],
+    "expected": [
+      "p5",
+      "p7",
+      "p2",
+      "p6",
+      "p3",
+      "p4",
+      "p8",
+      "p1"
+    ]
+  }
+]

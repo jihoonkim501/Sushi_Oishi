@@ -1,0 +1,60 @@
+.current {
+  margin: 0 0 var(--space-4);
+  color: var(--color-text-muted);
+  font: var(--text-caption);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+  margin: 0 0 var(--space-4);
+  padding: 0;
+  list-style: none;
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  width: 100%;
+  min-height: 92px;
+  padding: var(--space-3) var(--space-1);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.selected {
+  border-color: var(--color-primary);
+}
+
+.dot {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+}
+
+.nameKo {
+  font: var(--text-body-strong);
+}
+
+.nameJa {
+  color: var(--color-text-muted);
+  font: var(--text-caption);
+}
+
+.cell:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-8) 0;
+}

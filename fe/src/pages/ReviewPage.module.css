@@ -1,0 +1,38 @@
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100svh;
+  background: var(--color-photo-bg);
+}
+
+.photo {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  object-fit: contain;
+}
+
+/* 사진 위에서도 버튼이 읽히도록 스크림 띠를 깐다 */
+.bar {
+  padding: var(--space-4) var(--gutter) calc(var(--space-6) + env(safe-area-inset-bottom));
+  background: var(--color-overlay-scrim);
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+/* 스크림 위의 secondary 버튼은 표면색으로 채워 읽히게 한다 */
+.actions > button:first-child {
+  background: var(--color-surface);
+}
+
+.caption {
+  margin: var(--space-3) 0 0;
+  color: var(--color-on-scrim);
+  font: var(--text-caption);
+  text-align: center;
+}

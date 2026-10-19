@@ -1,0 +1,38 @@
+.button {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.plain {
+  background: transparent;
+  color: var(--color-text);
+}
+
+.plain:hover,
+.plain:active {
+  background: var(--color-surface-muted);
+}
+
+.onPhoto {
+  background: var(--color-overlay-scrim);
+  color: var(--color-on-scrim);
+}
+
+.button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}

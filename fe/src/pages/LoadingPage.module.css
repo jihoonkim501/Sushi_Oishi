@@ -1,0 +1,79 @@
+.page {
+  position: relative;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--color-photo-bg);
+  color: var(--color-on-scrim);
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(8px);
+  transform: scale(1.05);
+}
+
+.scanLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: var(--color-primary);
+  box-shadow: 0 0 12px var(--color-primary);
+  animation: scan 1.4s linear infinite;
+}
+
+.message {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--space-10);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--gutter);
+}
+
+.text {
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  background: var(--color-overlay-scrim);
+  font: var(--text-body-strong);
+}
+
+.spinner {
+  display: none;
+}
+
+@keyframes scan {
+  from {
+    top: 0;
+  }
+  to {
+    top: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scanLine {
+    display: none;
+  }
+
+  .spinner {
+    display: inline-flex;
+  }
+}
+
+.caption {
+  margin: 0;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  background: var(--color-overlay-scrim);
+  font: var(--text-caption);
+}

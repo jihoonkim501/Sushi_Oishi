@@ -1,0 +1,26 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  border: 2px solid var(--badge-text-light);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-badge);
+  font: var(--text-badge);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.md {
+  width: 28px;
+  height: 28px;
+}
+
+.lg {
+  width: 32px;
+  height: 32px;
+}
+
+.dimmed {
+  opacity: 0.4;
+}
