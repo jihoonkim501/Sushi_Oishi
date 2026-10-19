@@ -1,9 +1,9 @@
-# sushi-oishi — 프로젝트 기획 및 개발 명세
+# 스시오이시 (Sushi-Oishi) — 프로젝트 기획 및 개발 명세
 
 > 이 문서는 사람과 AI 코딩 에이전트가 함께 읽는 **단일 기준 문서(Source of Truth)** 다.
 > 에이전트는 작업 전 이 문서를 먼저 읽고, 여기 정의된 구조·명명·API·스키마를 따른다.
 > 문서와 코드가 다르면 **문서를 기준으로 코드를 고치거나, 문서를 먼저 수정한 뒤** 코드를 바꾼다.
-> 디자인 관련 규칙은 `DESIGN.md`를 따른다.
+> 디자인 관련 규칙은 `DESIGN.md`를 따른다. 요구사항과 수용 기준은 `REQUIREMENTS.md`, 화면·API·데이터의 상세 동작은 `FUNCTIONAL_SPEC.md`를 따른다.
 > 이 파일은 저장소 루트(`project/`)에 둔다. 폴더 구성은 6.2장을 따른다.
 
 ---
@@ -123,9 +123,11 @@
 1. confidence < 0.40 인 항목 제거
 2. NMS: IoU >= 0.50 인 박스 중 confidence 높은 것만 유지
 3. 각 항목에 sushi_types.order_score 매핑 (없으면 unknown = 50)
-4. 정렬 키: (order_score ASC, box 중심 y ASC, box 중심 x ASC)
-   - 같은 점수면 사진 왼쪽 위부터 → 손이 가는 순서
-   - y 비교 시 박스 높이의 50% 이내 차이는 같은 줄로 보고 x로 비교
+4. 정렬: order_score ASC. 같은 점수끼리는 "행 그룹핑" 후 위쪽 행부터, 행 안에서는 왼쪽부터
+   - 행 그룹핑: (cy ASC, cx ASC, confidence DESC)로 정렬 → 첫 항목을 행 기준으로 두고,
+     다음 항목의 cy - 기준.cy ≤ 0.5 × 기준.h 이면 같은 행, 아니면 새 행(그 항목이 새 기준)
+   - 행 안 정렬: (cx ASC, confidence DESC, x1 ASC, y1 ASC)
+   - "같은 줄" 판정을 비교 함수에 넣지 않는다 (비추이적 → Java 정렬 예외). 상세: FUNCTIONAL_SPEC.md BR-ORD-04
 5. 정렬 순서대로 order = 1..N 부여
 출력: 정렬된 items[]
 ```
@@ -223,8 +225,8 @@ project/                    # 저장소 루트 (IntelliJ로 이 폴더를 열고
 ├─ be/                      # 백엔드: Spring Boot (IntelliJ)
 │  ├─ build.gradle.kts
 │  └─ src/
-│     ├─ main/java/com/sushioishi/
-│     │  ├─ SushiOishiApplication.java
+│     ├─ main/java/com/sushisoon/
+│     │  ├─ SushiSoonApplication.java
 │     │  ├─ scan/           # ScanController, ScanService, Scan, Detection, DTO
 │     │  ├─ inference/      # SushiDetector, ImagePreprocessor, PostProcessor, Nms
 │     │  ├─ order/          # OrderEngine, SushiType, SushiTypeRepository
@@ -235,7 +237,7 @@ project/                    # 저장소 루트 (IntelliJ로 이 폴더를 열고
 │     │  ├─ application.yml
 │     │  ├─ db/migration/   # V1__init.sql, V2__seed_sushi_types.sql ...
 │     │  └─ model/          # sushi-yolo-v1.onnx, labels.json (git-lfs 또는 배포 시 다운로드)
-│     └─ test/java/com/sushioishi/
+│     └─ test/java/com/sushisoon/
 ├─ fe/                      # 프론트엔드: React + Vite (IntelliJ Ultimate 또는 VS Code)
 │  ├─ vite.config.ts        # /api → localhost:8080 프록시
 │  └─ src/
@@ -313,12 +315,22 @@ project/                    # 저장소 루트 (IntelliJ로 이 폴더를 열고
 
 | HTTP | code | 상황 |
 | --- | --- | --- |
+| 400 | INVALID_DEVICE_ID | X-Device-Id 없음·형식 오류 |
+| 400 | VALIDATION_ERROR | 필수 값 누락, 본문 형식 오류 |
 | 400 | INVALID_IMAGE | 이미지 디코딩 실패 |
-| 413 | IMAGE_TOO_LARGE | 5MB 초과 |
+| 400 | INVALID_CLASS_ID | 없는 classId로 수정 |
+| 404 | SCAN_NOT_FOUND | 스캔 없음 또는 다른 기기의 스캔 |
+| 404 | ITEM_NOT_FOUND | 스캔에 없는 itemId |
+| 413 | IMAGE_TOO_LARGE | 5MB 또는 50MP 초과 |
 | 415 | UNSUPPORTED_FORMAT | 지원하지 않는 형식 |
 | 422 | NO_SUSHI_DETECTED | 인식 결과 0개 (scan은 저장하지 않음) |
-| 429 | RATE_LIMITED | 기기당 분당 10회 초과 |
+| 429 | RATE_LIMITED | 기기당 분당 10회 초과 (`POST /scans`), `Retry-After` 헤더 |
+| 500 | INTERNAL_ERROR | 처리되지 않은 예외 |
 | 503 | MODEL_UNAVAILABLE | 모델 로드 실패 |
+| 503 | SERVER_BUSY | 추론 대기 10초 초과 |
+
+- `POST /scans` 성공 응답은 `201 Created` + `Location` 헤더, 본문에 `createdAt` 포함.
+- `itemId`는 `detections.id`다. 엔드포인트별 상세는 `FUNCTIONAL_SPEC.md` 6장.
 
 ### 7.3 DB 스키마 (Flyway `V1__init.sql` 기준)
 
@@ -332,8 +344,11 @@ project/                    # 저장소 루트 (IntelliJ로 이 폴더를 열고
 
 ### 7.4 구현 메모
 - 모델은 애플리케이션 시작 시 한 번 로드(`@PostConstruct` 또는 `@Bean`), `OrtSession`은 재사용. 추론은 스레드 안전성을 확인하고 필요 시 세션 풀 사용.
-- `modelVersion`은 설정값(`sushioishi.model.version`)으로 관리하고 응답·DB에 기록.
+- `modelVersion`은 설정값(`sushisoon.model.version`)으로 관리하고 응답·DB에 기록.
 - 레이트 리밋은 MVP에서 인메모리(Bucket4j 등)로 충분.
+- 스캔 조회·수정은 항상 `device_id` 조건을 함께 건다. 다른 기기의 스캔은 존재 여부를 숨기고 `404 SCAN_NOT_FOUND`.
+- 추론 동시 실행 수는 세마포어로 제한한다(기본 2). 10초 안에 차례가 오지 않으면 `503 SERVER_BUSY`.
+- 서버는 원본 이미지를 응답하지 않는다. 결과 화면 사진은 클라이언트가 IndexedDB에 보관한 사본을 쓴다 (`FUNCTIONAL_SPEC.md` C-8).
 - CORS: 개발 시 Vite 프록시를 쓰므로 불필요. 프론트를 다른 도메인에 배포하면 해당 origin만 허용.
 
 ---
