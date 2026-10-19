@@ -9,8 +9,8 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: '스시순',
-        short_name: '스시순',
+        name: 'sushi-oishi',
+        short_name: 'sushi-oishi',
         theme_color: '#F2704E',
         background_color: '#FAF7F2',
         display: 'standalone',

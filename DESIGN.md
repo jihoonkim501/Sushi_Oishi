@@ -1,4 +1,4 @@
-# 스시순 (SushiSoon) — 디자인 가이드
+# sushi-oishi — 디자인 가이드
 
 > 이 문서는 디자인(Figma)과 프론트엔드 구현(React)이 함께 따르는 **디자인 기준 문서**다.
 > AI 코딩 에이전트는 UI를 만들거나 고칠 때 이 문서의 토큰·컴포넌트·화면 규칙을 따른다.
@@ -277,7 +277,7 @@ export const BADGE_BY_GROUP = {
 
 ```
 ┌─────────────────────────┐
-│  스시순           (테마)  │
+│  sushi-oishi      (테마)  │
 │                         │
 │  [일러스트: 나무 도마 위  │
 │   초밥 3피스, 번호 배지]  │
@@ -408,14 +408,14 @@ export const BADGE_BY_GROUP = {
 - 아이콘: Lucide 아이콘 세트 (선 굵기 2px, 24px 기준). 카메라, 이미지, 체크, 화살표, 공유.
 - 일러스트: 플랫, 2~3색 (`--color-wood`, `--color-primary`, `--color-bg`), 선 없음.
 - 앱 아이콘: 연어 주황 배경 위 흰색 원형 배지 안에 숫자 "1" + 작은 초밥 실루엣. 512 / 192 / maskable 버전.
-- PWA manifest: `name: "스시순"`, `theme_color: #F2704E`, `background_color: #FAF7F2`, `display: standalone`, `orientation: portrait`.
+- PWA manifest: `name: "sushi-oishi"`, `theme_color: #F2704E`, `background_color: #FAF7F2`, `display: standalone`, `orientation: portrait`.
 
 ---
 
 ## 11. Figma 작업 구조
 
 ```
-📁 SushiSoon
+📁 sushi-oishi
  ├─ 00 Cover
  ├─ 01 Foundations   (컬러 스타일, 텍스트 스타일, 간격, 그리드 = 이 문서 2~4장)
  ├─ 02 Components    (5장 컴포넌트, variant: state=default/selected/eaten/low)

@@ -1,2 +1,2 @@
 /** OrderEngine, SushiType, SushiTypeRepository. */
-package com.sushisoon.order;
+package com.sushioishi.order;

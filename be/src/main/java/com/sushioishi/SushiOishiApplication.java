@@ -1,13 +1,13 @@
-package com.sushisoon;
+package com.sushioishi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SushiSoonApplication {
+public class SushiOishiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SushiSoonApplication.class, args);
+		SpringApplication.run(SushiOishiApplication.class, args);
 	}
 
 }

@@ -1,4 +1,4 @@
-# 스시순 (SushiSoon) — 프로젝트 기획 및 개발 명세
+# sushi-oishi — 프로젝트 기획 및 개발 명세
 
 > 이 문서는 사람과 AI 코딩 에이전트가 함께 읽는 **단일 기준 문서(Source of Truth)** 다.
 > 에이전트는 작업 전 이 문서를 먼저 읽고, 여기 정의된 구조·명명·API·스키마를 따른다.
@@ -223,8 +223,8 @@ project/                    # 저장소 루트 (IntelliJ로 이 폴더를 열고
 ├─ be/                      # 백엔드: Spring Boot (IntelliJ)
 │  ├─ build.gradle.kts
 │  └─ src/
-│     ├─ main/java/com/sushisoon/
-│     │  ├─ SushiSoonApplication.java
+│     ├─ main/java/com/sushioishi/
+│     │  ├─ SushiOishiApplication.java
 │     │  ├─ scan/           # ScanController, ScanService, Scan, Detection, DTO
 │     │  ├─ inference/      # SushiDetector, ImagePreprocessor, PostProcessor, Nms
 │     │  ├─ order/          # OrderEngine, SushiType, SushiTypeRepository
@@ -235,7 +235,7 @@ project/                    # 저장소 루트 (IntelliJ로 이 폴더를 열고
 │     │  ├─ application.yml
 │     │  ├─ db/migration/   # V1__init.sql, V2__seed_sushi_types.sql ...
 │     │  └─ model/          # sushi-yolo-v1.onnx, labels.json (git-lfs 또는 배포 시 다운로드)
-│     └─ test/java/com/sushisoon/
+│     └─ test/java/com/sushioishi/
 ├─ fe/                      # 프론트엔드: React + Vite (IntelliJ Ultimate 또는 VS Code)
 │  ├─ vite.config.ts        # /api → localhost:8080 프록시
 │  └─ src/
@@ -332,7 +332,7 @@ project/                    # 저장소 루트 (IntelliJ로 이 폴더를 열고
 
 ### 7.4 구현 메모
 - 모델은 애플리케이션 시작 시 한 번 로드(`@PostConstruct` 또는 `@Bean`), `OrtSession`은 재사용. 추론은 스레드 안전성을 확인하고 필요 시 세션 풀 사용.
-- `modelVersion`은 설정값(`sushisoon.model.version`)으로 관리하고 응답·DB에 기록.
+- `modelVersion`은 설정값(`sushioishi.model.version`)으로 관리하고 응답·DB에 기록.
 - 레이트 리밋은 MVP에서 인메모리(Bucket4j 등)로 충분.
 - CORS: 개발 시 Vite 프록시를 쓰므로 불필요. 프론트를 다른 도메인에 배포하면 해당 origin만 허용.
 

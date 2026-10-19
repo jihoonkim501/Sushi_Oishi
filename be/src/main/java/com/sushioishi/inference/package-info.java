@@ -1,2 +1,2 @@
 /** SushiDetector, ImagePreprocessor, PostProcessor, Nms. */
-package com.sushisoon.inference;
+package com.sushioishi.inference;
