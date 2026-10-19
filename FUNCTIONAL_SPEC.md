@@ -191,7 +191,7 @@ S-01 홈 ──촬영/선택──▶ S-02 사진 확인 ──다시 찍기─�
 3. `image` 파트가 없으면 `400 VALIDATION_ERROR`.
 4. 파일 크기 > 5,242,880 bytes → `413 IMAGE_TOO_LARGE`. (컨테이너 설정 `spring.servlet.multipart.max-file-size=6MB`로 1차 차단, 초과 시 같은 에러 코드로 변환)
 5. 헤더 바이트(매직 넘버)로 형식 판별: JPEG(`FF D8 FF`), PNG(`89 50 4E 47`). 그 외 → `415 UNSUPPORTED_FORMAT`.
-6. `ImageIO` 리더로 너비·높이만 먼저 읽고, `w*h > 50,000,000`이면 `413 IMAGE_TOO_LARGE`.
+6. `ImageIO` 리더로 너비·높이만 먼저 읽고, `w*h > 25,000,000`이면 `413 IMAGE_TOO_LARGE`.
 7. 디코딩. 실패 시 `400 INVALID_IMAGE`.
 8. EXIF Orientation(1~8)을 읽어 회전·반전 적용 (클라이언트에서 이미 처리했더라도 안전장치).
 9. 긴 변 > 1280이면 축소 (bilinear). 결과가 **기준 이미지**이며 `imageWidth`, `imageHeight`가 된다.

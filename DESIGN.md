@@ -148,6 +148,7 @@
   --duration-fast: 120ms;
   --duration-base: 200ms;
   --duration-slow: 320ms;
+  --stagger-step: 60ms;
 
   /* layout */
   --content-max: 480px;
@@ -190,6 +191,7 @@
     --duration-fast: 0ms;
     --duration-base: 0ms;
     --duration-slow: 0ms;
+    --stagger-step: 0ms;
   }
 }
 ```
@@ -245,7 +247,7 @@ export const BADGE_BY_GROUP = {
 ### 5.2 `DetectionBox`
 - 테두리 2px, 모서리 `--radius-md`, 채움 없음
 - 기본: 흰색 테두리 (opacity 0.9)
-- 선택됨: `--color-primary` 테두리 3px + 바깥에 `--color-on-scrim` 1px 링(사진 위 대비 보장) + 배지 1.15배 확대
+- 선택됨: `--color-primary` 테두리 3px + 바깥에 `--color-on-scrim` 1px 링 + 그 바깥에 `--color-overlay-scrim` 2px 어두운 보조 윤곽(밝은 사진에서 흰 링이 묻히지 않도록 대비 보장) + 배지 1.15배 확대
 - 먹음: 박스·배지 opacity 0.4, 배지 숫자 대신 체크 아이콘
 - 저신뢰(confidence < 0.6): 점선 테두리 + 이름 뒤 `?`
 - 좌상단(박스 바깥 위 -14px, 왼쪽 -14px)에 `SushiBadge`
@@ -285,7 +287,7 @@ export const BADGE_BY_GROUP = {
 - 하단 시트 위 16px, `--color-text` 배경 + `--color-bg` 글자, 2.5초 후 사라짐
 - 예: "순서를 다시 계산했어요"
 - Props: `message: string`, `action?: { label: string; onAction: () => void }`, `duration?: number`(기본 2500ms, `action`이 있으면 5000ms)
-- `role="status"`(오류 토스트는 `role="alert"`), `aria-live` polite. 액션 버튼은 44×44px 이상, 글자 `--color-bg` + `--text-body-strong` + 밑줄(토스트 배경 위 대비 확보, 색만으로 구분하지 않음).
+- 일반 토스트는 `role="status"`(`aria-live="polite"`), 오류 토스트는 `role="alert"`(기본 assertive 유지, `aria-live`를 따로 지정하지 않음). 액션 버튼은 44×44px 이상, 글자 `--color-bg` + `--text-body-strong` + 밑줄(토스트 배경 위 대비 확보, 색만으로 구분하지 않음).
 - 한 번에 하나만 표시, 새 토스트가 이전 것을 대체. `prefers-reduced-motion`이면 페이드 없이 즉시 표시·제거.
 
 ### 5.9 `IconButton`
@@ -533,7 +535,7 @@ export const BADGE_BY_GROUP = {
 
 | 상황 | 동작 | 시간 |
 | --- | --- | --- |
-| 결과 진입 | 배지가 order 순서대로 하나씩 등장 (scale 0.6 → 1, opacity 0 → 1), 60ms 간격 | `--duration-base` |
+| 결과 진입 | 배지가 order 순서대로 하나씩 등장 (scale 0.6 → 1, opacity 0 → 1), `--stagger-step`(60ms) 간격, reduced-motion이면 0ms | `--duration-base` |
 | 박스/행 선택 | 테두리 색 전환 + 배지 1.15배 | `--duration-fast` |
 | 행 탭 → 박스 펄스 | scale 1 → 1.15 → 1 | `--duration-slow` |
 | 시트 높이 전환 | translateY | `--duration-slow`, `--ease-out` |
@@ -554,7 +556,7 @@ export const BADGE_BY_GROUP = {
 - 오버레이 박스마다 `aria-label="1번 광어, 흰살, 신뢰도 높음"` 형식의 레이블.
 - 순서 리스트는 `<ol>`로 마크업하고, 화면 낭독기는 리스트를 우선 읽도록 오버레이 레이어는 `aria-hidden="false"`이되 포커스 순서를 리스트 뒤로 둔다.
 - 체크 버튼: `aria-pressed`로 먹음 상태 전달. `aria-label="2번 도미 먹음 표시"` 형식(`{order}번 {nameKo} 먹음 표시`), 눌린 상태는 `aria-pressed`로만 바꾸고 레이블은 고정.
-- 오버레이 박스 `aria-label` 형식: `{order}번 {nameKo}, {그룹 한글}, 신뢰도 {높음|낮음}` (confidence >= 0.6 높음). 먹음이면 끝에 `, 먹음`, 수정됨이면 `, 직접 고침`. 박스는 `role="button"`, `tabIndex=0`, Enter로 선택. 길게 누름(종류 수정)의 키보드 대안으로 포커스된 `OrderRow`에 `종류 바꾸기` 버튼(44×44, `aria-label="{order}번 {nameKo} 종류 바꾸기"`)을 항상 노출한다.
+- 오버레이 박스 `aria-label` 형식: `{order}번 {nameKo}, {그룹 한글}, 신뢰도 {높음|낮음}` (confidence >= 0.6 높음). 먹음이면 끝에 `, 먹음`, 수정됨이면 `, 직접 고침`. 박스는 `role="button"`, `tabIndex=0`, Enter와 Space로 선택. 길게 누름(종류 수정)의 키보드 대안으로 포커스된 `OrderRow`에 `종류 바꾸기` 버튼(44×44, `aria-label="{order}번 {nameKo} 종류 바꾸기"`)을 항상 노출한다.
 - 아이콘 전용 버튼은 `aria-label` 필수 (설정, 뒤로, 닫기). 장식 아이콘은 `aria-hidden="true"`.
 - 다이얼로그/시트: `role="dialog"` + `aria-modal` + 포커스 이동·복귀·트랩, Esc 닫기.
 - 토글: `role="switch"` + `aria-checked`. 세그먼트: `role="radiogroup"`.
