@@ -2,7 +2,7 @@ spring:
   application:
     name: sushi-oishi
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/sushioishi}
+    url: ${DB_URL:jdbc:postgresql://localhost:5434/sushioishi}
     username: ${DB_USERNAME:sushioishi}
     password: ${DB_PASSWORD:sushioishi}
   jpa:

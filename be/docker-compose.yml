@@ -6,7 +6,7 @@ services:
       POSTGRES_USER: sushioishi
       POSTGRES_PASSWORD: sushioishi
     ports:
-      - "5432:5432"
+      - "5434:5432"
     volumes:
       - sushioishi-postgres-data:/var/lib/postgresql/data
 
